@@ -1,0 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes hero-progress-bar {
+    from { transform: scaleX(1); }
+    to { transform: scaleX(0); }
+}
+
+@keyframes hero-progress-circle {
+    from { stroke-dashoffset: 0; }
+    to { stroke-dashoffset: 113.1; }
+}
+
+@keyframes hero-copy-enter {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-copy-enter {
+    animation: hero-copy-enter 500ms ease-out both;
+}
+
+.hero-progress-bar {
+    animation-name: hero-progress-bar;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+}
+
+.hero-progress-circle {
+    animation-name: hero-progress-circle;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+}
+
+/* ── Clients marquee ─────────────────────────────────────────────────────── */
+@keyframes marquee-left {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+@keyframes marquee-right {
+    from { transform: translateX(-50%); }
+    to   { transform: translateX(0); }
+}
+.marquee-left  { animation: marquee-left  70s linear infinite; }
+.marquee-right { animation: marquee-right 55s linear infinite; }
+.marquee-left:hover,
+.marquee-right:hover { animation-play-state: paused; }
+
+/* ── Page loader ─────────────────────────────────────────────────────────── */
+@keyframes loader-fill {
+    from { transform: scaleX(0); }
+    to   { transform: scaleX(1); }
+}
+.loader-bar {
+    transform-origin: left center;
+    animation: loader-fill 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* ── Scroll reveal ───────────────────────────────────────────────────────── */
+[data-reveal] {
+    opacity: 0;
+    transform: translateY(28px);
+    transition:
+        opacity  0.72s cubic-bezier(0.16, 1, 0.3, 1),
+        transform 0.72s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: opacity, transform;
+}
+[data-reveal="fade"]  { transform: none; }
+[data-reveal="left"]  { transform: translateX(-32px); }
+[data-reveal="right"] { transform: translateX(32px); }
+[data-reveal="scale"] { transform: scale(0.93) translateY(14px); }
+
+[data-revealed] {
+    opacity: 1  !important;
+    transform: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .hero-progress-bar,
+    .hero-progress-circle,
+    .hero-copy-enter,
+    .loader-bar {
+        animation: none;
+    }
+    [data-reveal] {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+}
+
+@layer base {
+    html { scroll-behavior: smooth; }
+    body { @apply bg-white font-sans text-slate-900 antialiased; font-family: 'Manrope', sans-serif; }
+}
+
+@layer components {
+    .site-container { @apply mx-auto w-full max-w-[1440px] px-5 sm:px-8 lg:px-12; }
+    .site-section { @apply py-20 sm:py-24 lg:py-28; }
+    .section-title { @apply text-3xl font-black leading-tight tracking-[-0.035em] text-slate-950 sm:text-5xl; }
+    .eyebrow { @apply text-xs font-extrabold uppercase tracking-[0.22em] text-blueprint-600; }
+    .nav-link { @apply text-sm font-bold text-slate-600 transition hover:text-blueprint-700; }
+    .nav-link-active { @apply text-blueprint-700; }
+    .btn-primary { @apply inline-flex items-center rounded-full bg-blueprint-600 px-6 py-3 text-sm font-extrabold text-white transition hover:bg-blueprint-700; }
+    .btn-secondary { @apply inline-flex items-center rounded-full border border-slate-300 px-6 py-3 text-sm font-extrabold text-slate-700 transition hover:border-blueprint-600 hover:text-blueprint-700; }
+    .btn-light { @apply inline-flex items-center rounded-full bg-white px-6 py-3 text-sm font-extrabold text-blueprint-950 transition hover:bg-blue-50; }
+    .btn-outline-light { @apply inline-flex items-center rounded-full border border-white/40 px-6 py-3 text-sm font-extrabold text-white transition hover:bg-white/10; }
+    .text-link { @apply inline-flex text-sm font-extrabold text-blueprint-700 hover:text-blueprint-900; }
+    .footer-title { @apply text-xs font-black uppercase tracking-[.2em] text-blue-200; }
+    .field-label { @apply block text-sm font-extrabold text-slate-700; }
+    .field-input { @apply mt-2 w-full rounded-xl border-slate-300 bg-white px-4 py-3 text-sm font-medium shadow-sm focus:border-blueprint-500 focus:ring-blueprint-500; }
+    .field-error { @apply mt-1 block text-xs font-semibold text-red-600; }
+    .brand-symbol { @apply grid h-11 w-11 place-items-center bg-blueprint-700 text-xl font-black text-white; clip-path: polygon(50% 0%, 94% 25%, 94% 75%, 50% 100%, 6% 75%, 6% 25%); }
+    .brand-symbol-light { @apply bg-white text-blueprint-800; }
+    .admin-card { @apply rounded-2xl border border-slate-200 bg-white p-6 shadow-sm; }
+    .admin-input { @apply mt-1 w-full rounded-lg border-slate-300 px-3 py-2.5 text-sm focus:border-blueprint-500 focus:ring-blueprint-500; }
+    .admin-label { @apply block text-xs font-extrabold uppercase tracking-wider text-slate-500; }
+    .admin-button { @apply inline-flex items-center justify-center rounded-lg bg-blueprint-700 px-4 py-2.5 text-sm font-extrabold text-white hover:bg-blueprint-800 disabled:opacity-50; }
+    .admin-button-muted { @apply inline-flex items-center justify-center rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-extrabold text-slate-700 hover:bg-slate-50; }
+}
