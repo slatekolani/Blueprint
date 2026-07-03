@@ -16,13 +16,14 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // ─── Parent Group ──────────────────────────────────────────────────────────
+        $groupHeroImage = Company::where('slug', 'blueprint-group')->value('hero_image_path') ?: '/images/blueprint/printing-showcase.jpeg';
         $group = Company::updateOrCreate(['slug' => 'blueprint-group'], [
             'name'             => 'BluePrint Group',
             'short_name'       => 'BluePrint',
             'tagline'          => 'Ideas designed. Brands built. Business moved forward.',
             'summary'          => 'A Tanzanian group delivering design, branding, printing, marketing, supply, logistics, insurance, ICT and event solutions.',
             'description'      => 'BluePrint is a Tanzanian-based creative and business solutions group established to meet the growing demand for quality brand, supply and professional services in Tanzania and beyond. We combine creativity, practical execution and dependable customer care across our family of specialist companies.',
-            'hero_image_path'  => '/images/blueprint/printing-showcase.jpeg',
+            'hero_image_path'  => $groupHeroImage,
             'primary_color'    => '#073B7A',
             'accent_color'     => '#20A8E0',
             'email'            => 'info@blueprintgroup.co.tz',
@@ -104,6 +105,7 @@ class DatabaseSeeder extends Seeder
 
         $companyModels = [];
         foreach ($companies as $company) {
+            $company['hero_image_path'] = Company::where('slug', $company['slug'])->value('hero_image_path') ?: $company['hero_image_path'];
             $companyModels[$company['slug']] = Company::updateOrCreate(
                 ['slug' => $company['slug']],
                 [...$company, 'parent_id' => $group->id]
@@ -364,8 +366,10 @@ class DatabaseSeeder extends Seeder
         $allCompanies = ['blueprint-group' => $group, ...$companyModels];
         foreach ($services as $companySlug => $items) {
             foreach ($items as $index => $svc) {
+                $serviceKeys = ['company_id' => $allCompanies[$companySlug]->id, 'slug' => Str::slug($svc['name'])];
+                $svc['image_path'] = Service::where($serviceKeys)->value('image_path') ?: $svc['image_path'];
                 $service = Service::updateOrCreate(
-                    ['company_id' => $allCompanies[$companySlug]->id, 'slug' => Str::slug($svc['name'])],
+                    $serviceKeys,
                     [
                         'name'        => $svc['name'],
                         'category'    => $svc['category'],
@@ -527,8 +531,10 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($projects as $index => $p) {
+            $projectKeys = ['company_id' => $p['company']->id, 'slug' => $p['slug']];
+            $p['cover_image_path'] = Project::where($projectKeys)->value('cover_image_path') ?: $p['cover_image_path'];
             Project::updateOrCreate(
-                ['company_id' => $p['company']->id, 'slug' => $p['slug']],
+                $projectKeys,
                 [
                     'title'            => $p['title'],
                     'category'         => $p['category'],
