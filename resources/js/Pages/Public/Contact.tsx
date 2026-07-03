@@ -1,6 +1,6 @@
 import PageHero from '@/Components/Public/PageHero';
 import PublicLayout from '@/Layouts/PublicLayout';
-import { Company, Service } from '@/types/content';
+import { Company, Service, formatServicePrice } from '@/types/content';
 import { Head, useForm } from '@inertiajs/react';
 
 export default function Contact({ companies, services, settings }: { companies: Company[]; services: Service[]; settings: Record<string, string> }) {
@@ -31,7 +31,7 @@ export default function Contact({ companies, services, settings }: { companies: 
                         <label className="field-label">Email<input type="email" className="field-input" value={form.data.email} onChange={e => form.setData('email', e.target.value)} /></label>
                         <label className="field-label">Organization<input className="field-input" value={form.data.organization} onChange={e => form.setData('organization', e.target.value)} /></label>
                         <label className="field-label">Company<select className="field-input" value={form.data.company_id} onChange={e => { form.setData('company_id', e.target.value); form.setData('service_id', ''); }}><option value="">BluePrint Group / not sure</option>{companies.map(company => <option key={company.id} value={company.id}>{company.name}</option>)}</select></label>
-                        <label className="field-label">Service<select className="field-input" value={form.data.service_id} onChange={e => form.setData('service_id', e.target.value)}><option value="">Select a service</option>{visibleServices.map(service => <option key={service.id} value={service.id}>{service.name}</option>)}</select></label>
+                        <label className="field-label">Service<select className="field-input" value={form.data.service_id} onChange={e => form.setData('service_id', e.target.value)}><option value="">Select a service</option>{visibleServices.map(service => <option key={service.id} value={service.id}>{service.name} ({formatServicePrice(service.price)})</option>)}</select></label>
                         <label className="field-label sm:col-span-2">Request type<select className="field-input" value={form.data.type} onChange={e => form.setData('type', e.target.value)}><option value="quote">Request a quote</option><option value="printing">Printing request</option><option value="supply">Supply request</option><option value="insurance">Insurance inquiry</option><option value="general">General inquiry</option></select></label>
                         <label className="field-label sm:col-span-2">How can we help?<textarea className="field-input min-h-36" value={form.data.message} onChange={e => form.setData('message', e.target.value)} required />{form.errors.message && <span className="field-error">{form.errors.message}</span>}</label>
                         <div className="sm:col-span-2"><button disabled={form.processing} className="btn-primary w-full justify-center disabled:opacity-50">{form.processing ? 'Sending…' : 'Send request'}</button></div>

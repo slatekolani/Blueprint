@@ -24,13 +24,16 @@ class PublicSiteController extends Controller
             'companies' => Company::query()
                 ->where('is_parent', false)
                 ->where('is_published', true)
-                ->with(['services' => fn ($query) => $query->where('is_published', true)->limit(4)])
+                ->with([
+                    'services' => fn ($query) => $query->where('is_published', true)->limit(4),
+                    'services.servicePrice',
+                ])
                 ->orderBy('sort_order')
                 ->get(),
             'featuredServices' => Service::query()
                 ->where('is_featured', true)
                 ->where('is_published', true)
-                ->with('company:id,name,slug,hero_image_path,primary_color')
+                ->with(['company:id,name,slug,hero_image_path,primary_color', 'servicePrice'])
                 ->orderBy('sort_order')
                 ->limit(8)
                 ->get(),
@@ -95,6 +98,7 @@ class PublicSiteController extends Controller
 
         $company->load([
             'services' => fn ($query) => $query->where('is_published', true)->orderBy('sort_order'),
+            'services.servicePrice',
             'projects' => fn ($query) => $query->where('is_published', true)->orderBy('sort_order'),
         ]);
 
@@ -144,7 +148,10 @@ class PublicSiteController extends Controller
     {
         return Inertia::render('Public/Services', [
             'companies' => Company::where('is_published', true)
-                ->with(['services' => fn ($query) => $query->where('is_published', true)->orderBy('sort_order')])
+                ->with([
+                    'services' => fn ($query) => $query->where('is_published', true)->orderBy('sort_order'),
+                    'services.servicePrice',
+                ])
                 ->orderByDesc('is_parent')
                 ->orderBy('sort_order')
                 ->get(),
@@ -159,11 +166,12 @@ class PublicSiteController extends Controller
     {
         abort_unless($service->is_published, 404);
 
-        $service->load('company');
+        $service->load(['company', 'servicePrice']);
 
         $related = Service::where('company_id', $service->company_id)
             ->where('is_published', true)
             ->whereKeyNot($service->id)
+            ->with('servicePrice')
             ->orderBy('sort_order')
             ->limit(3)
             ->get();
@@ -267,7 +275,7 @@ class PublicSiteController extends Controller
     {
         return Inertia::render('Public/Contact', [
             'companies' => Company::where('is_published', true)->orderByDesc('is_parent')->orderBy('sort_order')->get(),
-            'services'  => Service::where('is_published', true)->orderBy('name')->get(['id', 'company_id', 'name']),
+            'services'  => Service::where('is_published', true)->with('servicePrice')->orderBy('name')->get(['id', 'company_id', 'name', 'category']),
             'settings'  => SiteSetting::values(),
             'meta' => [
                 'title'       => 'Contact BluePrint Group Tanzania | Request a Quote',

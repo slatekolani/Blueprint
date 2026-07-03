@@ -364,7 +364,7 @@ class DatabaseSeeder extends Seeder
         $allCompanies = ['blueprint-group' => $group, ...$companyModels];
         foreach ($services as $companySlug => $items) {
             foreach ($items as $index => $svc) {
-                Service::updateOrCreate(
+                $service = Service::updateOrCreate(
                     ['company_id' => $allCompanies[$companySlug]->id, 'slug' => Str::slug($svc['name'])],
                     [
                         'name'        => $svc['name'],
@@ -376,6 +376,9 @@ class DatabaseSeeder extends Seeder
                         'sort_order'  => $index,
                     ]
                 );
+                $service->servicePrice()->updateOrCreate([], [
+                    'price' => $svc['price'] ?? 'Price on request',
+                ]);
             }
         }
 

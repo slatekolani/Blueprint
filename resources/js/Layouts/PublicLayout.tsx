@@ -1,6 +1,6 @@
 import BrandMark from '@/Components/BrandMark';
 import PageLoader from '@/Components/Public/PageLoader';
-import { Company, Project, Service, mediaUrl } from '@/types/content';
+import { Company, Project, Service, formatServicePrice, mediaUrl } from '@/types/content';
 import { Link, usePage } from '@inertiajs/react';
 import { PropsWithChildren, useEffect, useState } from 'react';
 
@@ -211,6 +211,7 @@ export default function PublicLayout({ children }: PropsWithChildren) {
                                                     >
                                                         <span className="block text-xs font-black uppercase tracking-wider text-slate-400">{service.category || 'Service'}</span>
                                                         <span className="mt-0.5 block text-sm font-extrabold text-slate-700">{service.name}</span>
+                                                        <span className="mt-0.5 block text-xs font-bold text-blueprint-700">{formatServicePrice(service.price)}</span>
                                                     </Link>
                                                 ))}
                                             </div>
@@ -222,6 +223,7 @@ export default function PublicLayout({ children }: PropsWithChildren) {
                                                 <div className="absolute inset-x-0 bottom-0 p-8">
                                                     <p className="text-xs font-black uppercase tracking-[0.2em] text-blue-200">{activeService.category || 'Service'}</p>
                                                     <h3 className="mt-2 text-3xl font-black">{activeService.name}</h3>
+                                                    <p className="mt-2 text-sm font-extrabold text-white">{formatServicePrice(activeService.price)}</p>
                                                     <p className="mt-3 line-clamp-2 text-sm leading-6 text-white/75">{activeService.summary}</p>
                                                     <p className="mt-5 text-xs font-bold uppercase tracking-wider text-white/60">{activeService.company?.short_name || activeService.company?.name}</p>
                                                 </div>
@@ -358,7 +360,8 @@ export default function PublicLayout({ children }: PropsWithChildren) {
                             <Link href={route('services.index')} onClick={closeMenu} className="block rounded-lg px-3 py-2 text-sm font-extrabold text-blue-300 transition hover:text-blue-200">View all services</Link>
                             {navigationServices.map(service => (
                                 <Link key={service.id} href={route('services.show', service.slug)} onClick={closeMenu} className="block rounded-lg px-3 py-2 text-sm font-semibold text-white/60 transition hover:bg-white/10 hover:text-white">
-                                    {service.name}
+                                    <span className="block">{service.name}</span>
+                                    <span className="mt-0.5 block text-xs text-blue-200">{formatServicePrice(service.price)}</span>
                                 </Link>
                             ))}
                         </div>

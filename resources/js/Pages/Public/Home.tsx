@@ -1,7 +1,7 @@
 import CompanyCard from '@/Components/Public/CompanyCard';
 import SectionHeading from '@/Components/Public/SectionHeading';
 import PublicLayout from '@/Layouts/PublicLayout';
-import { Client, Company, Project, Service, mediaUrl } from '@/types/content';
+import { Client, Company, Project, Service, formatServicePrice, mediaUrl } from '@/types/content';
 import { Head, Link } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
 
@@ -186,6 +186,7 @@ export default function Home({ group, companies, featuredServices, featuredProje
                                     <div className="p-6">
                                         <span className="text-xs font-black text-blueprint-500">0{index + 1}</span>
                                         <h3 className="mt-4 text-lg font-extrabold">{service.name}</h3>
+                                        <p className="mt-2 text-sm font-extrabold text-slate-900">{formatServicePrice(service.price)}</p>
                                         <p className="mt-2 text-sm leading-6 text-slate-600">{service.summary}</p>
                                         <p className="mt-4 text-xs font-bold uppercase tracking-wider text-blueprint-700">{service.company?.name}</p>
                                     </div>

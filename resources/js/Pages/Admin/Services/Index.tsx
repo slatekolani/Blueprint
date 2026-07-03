@@ -1,10 +1,10 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { confirmDelete, confirmSave } from '@/lib/swal';
-import { Company, Service, mediaUrl } from '@/types/content';
+import { Company, Service, formatServicePrice, mediaUrl } from '@/types/content';
 import { Head, router, useForm } from '@inertiajs/react';
 import { useRef, useState } from 'react';
 
-const empty = { company_id: '', name: '', slug: '', category: '', icon: '', summary: '', description: '', image: null as File | null, is_featured: false, is_published: true, sort_order: 0 };
+const empty = { company_id: '', name: '', slug: '', category: '', price: 'Price on request', icon: '', summary: '', description: '', image: null as File | null, is_featured: false, is_published: true, sort_order: 0 };
 
 export default function Index({ services, companies }: { services: Service[]; companies: Pick<Company, 'id' | 'name'>[] }) {
     const [editing, setEditing] = useState<Service | null>(null);
@@ -40,7 +40,8 @@ export default function Index({ services, companies }: { services: Service[]; co
                     <div className="mt-6 space-y-4">
                         <AdminField label="Company" error={form.errors.company_id}><select className="admin-input" value={form.data.company_id} onChange={e => form.setData('company_id', e.target.value)}><option value="">Select company</option>{companies.map(company => <option value={company.id} key={company.id}>{company.name}</option>)}</select></AdminField>
                         <AdminField label="Service name" error={form.errors.name}><input className="admin-input" value={form.data.name} onChange={e => form.setData('name', e.target.value)} /></AdminField>
-                        <div className="grid gap-4 sm:grid-cols-2"><AdminField label="Category"><input className="admin-input" value={form.data.category || ''} onChange={e => form.setData('category', e.target.value)} /></AdminField><AdminField label="Sort order"><input type="number" className="admin-input" value={form.data.sort_order} onChange={e => form.setData('sort_order', Number(e.target.value))} /></AdminField></div>
+                        <div className="grid gap-4 sm:grid-cols-2"><AdminField label="Category"><input className="admin-input" value={form.data.category || ''} onChange={e => form.setData('category', e.target.value)} /></AdminField><AdminField label="Price" error={form.errors.price}><input className="admin-input" value={form.data.price || ''} onChange={e => form.setData('price', e.target.value)} required /></AdminField></div>
+                        <AdminField label="Sort order"><input type="number" className="admin-input" value={form.data.sort_order} onChange={e => form.setData('sort_order', Number(e.target.value))} /></AdminField>
                         <AdminField label="Short summary"><textarea className="admin-input min-h-24" value={form.data.summary || ''} onChange={e => form.setData('summary', e.target.value)} /></AdminField>
                         <AdminField label="Full description"><textarea className="admin-input min-h-32" value={form.data.description || ''} onChange={e => form.setData('description', e.target.value)} /></AdminField>
                         <AdminField label={editing ? 'Replace image' : 'Image'} error={form.errors.image}>
@@ -60,6 +61,7 @@ export default function Index({ services, companies }: { services: Service[]; co
                                     <div>
                                         <p className="text-xs font-black uppercase tracking-wider text-blueprint-600">{service.company?.name} · {service.category || 'Service'}</p>
                                         <h3 className="mt-2 text-lg font-black">{service.name}</h3>
+                                        <p className="mt-2 text-sm font-extrabold text-slate-900">{formatServicePrice(service.price)}</p>
                                         <p className="mt-2 text-sm leading-6 text-slate-600">{service.summary}</p>
                                     </div>
                                     <div className="flex shrink-0 items-start gap-2">

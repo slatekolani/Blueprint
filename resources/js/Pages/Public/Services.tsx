@@ -2,7 +2,7 @@ import { CompanyLogo } from '@/Components/Public/CompanyCard';
 import PageHero from '@/Components/Public/PageHero';
 import RequestServiceModal from '@/Components/Public/RequestServiceModal';
 import PublicLayout from '@/Layouts/PublicLayout';
-import { Company, Service, mediaUrl } from '@/types/content';
+import { Company, Service, formatServicePrice, mediaUrl } from '@/types/content';
 import { Head, Link } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
 
@@ -204,6 +204,7 @@ function ServiceCard({ service, company, onRequest }: {
                 <div className="flex flex-1 flex-col p-6 pb-4">
                     <p className="text-xs font-black uppercase tracking-wider text-slate-400">{service.category}</p>
                     <h3 className="mt-2 text-lg font-extrabold">{service.name}</h3>
+                    <p className="mt-2 text-sm font-extrabold" style={{ color: company.primary_color }}>{formatServicePrice(service.price)}</p>
                     <p className="mt-3 flex-1 text-sm leading-6 text-slate-600">{service.summary}</p>
                 </div>
             </Link>

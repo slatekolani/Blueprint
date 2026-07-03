@@ -42,9 +42,12 @@ class HandleInertiaRequests extends Middleware
             ],
             'navigationCompanies' => fn () => Company::query()
                 ->where('is_published', true)
-                ->with(['services' => fn ($query) => $query
-                    ->where('is_published', true)
-                    ->orderBy('sort_order')])
+                ->with([
+                    'services' => fn ($query) => $query
+                        ->where('is_published', true)
+                        ->orderBy('sort_order'),
+                    'services.servicePrice',
+                ])
                 ->orderBy('sort_order')
                 ->get([
                     'id',
@@ -58,7 +61,7 @@ class HandleInertiaRequests extends Middleware
                 ]),
             'navigationServices' => fn () => Service::query()
                 ->where('is_published', true)
-                ->with('company:id,name,slug,short_name,hero_image_path,primary_color')
+                ->with(['company:id,name,slug,short_name,hero_image_path,primary_color', 'servicePrice'])
                 ->orderByDesc('is_featured')
                 ->orderBy('sort_order')
                 ->limit(8)

@@ -17,7 +17,7 @@ class ServiceController extends Controller
     public function index(Request $request): Response
     {
         return Inertia::render('Admin/Services/Index', [
-            'services' => Service::with('company:id,name')
+            'services' => Service::with(['company:id,name', 'servicePrice'])
                 ->when(!$request->user()->isSuperAdmin(), fn ($query) => $query->where('company_id', $request->user()->company_id))
                 ->orderBy('company_id')->orderBy('sort_order')->get(),
             'companies' => $this->companies($request),
@@ -28,12 +28,14 @@ class ServiceController extends Controller
     {
         $data = $this->validated($request);
         $this->authorizeCompanyId($request, (int) $data['company_id']);
+        $price = $data['price'];
         $data['slug'] = Str::slug($data['slug'] ?: $data['name']);
         if ($request->hasFile('image')) {
             $data['image_path'] = $request->file('image')->store('services', 'uploads');
         }
-        unset($data['image']);
-        Service::create($data);
+        unset($data['image'], $data['price']);
+        $service = Service::create($data);
+        $service->servicePrice()->create(['price' => $price]);
 
         return back()->with('success', 'Service created.');
     }
@@ -43,13 +45,15 @@ class ServiceController extends Controller
         $this->authorizeCompanyId($request, $service->company_id);
         $data = $this->validated($request, $service);
         $this->authorizeCompanyId($request, (int) $data['company_id']);
+        $price = $data['price'];
         $data['slug'] = Str::slug($data['slug'] ?: $data['name']);
         if ($request->hasFile('image')) {
             $data['image_path'] = $request->file('image')->store('services', 'uploads');
             $this->deleteManagedImage($service->image_path);
         }
-        unset($data['image']);
+        unset($data['image'], $data['price']);
         $service->update($data);
+        $service->servicePrice()->updateOrCreate([], ['price' => $price]);
 
         return back()->with('success', 'Service updated.');
     }
@@ -70,6 +74,7 @@ class ServiceController extends Controller
             'name' => ['required', 'string', 'max:160'],
             'slug' => ['nullable', 'alpha_dash', 'max:160'],
             'category' => ['nullable', 'string', 'max:120'],
+            'price' => ['required', 'string', 'max:120'],
             'icon' => ['nullable', 'string', 'max:80'],
             'summary' => ['nullable', 'string', 'max:1000'],
             'description' => ['nullable', 'string'],

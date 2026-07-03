@@ -2,7 +2,7 @@ import { CompanyLogo } from '@/Components/Public/CompanyCard';
 import Breadcrumb from '@/Components/Public/Breadcrumb';
 import RequestForm from '@/Components/Public/RequestForm';
 import PublicLayout from '@/Layouts/PublicLayout';
-import { Company as CompanyType, mediaUrl } from '@/types/content';
+import { Company as CompanyType, formatServicePrice, mediaUrl } from '@/types/content';
 import { Head, Link } from '@inertiajs/react';
 import { useState } from 'react';
 
@@ -85,6 +85,7 @@ export default function Company({ company, siblings }: { company: CompanyType; s
                                             <span className="text-sm font-black" style={{ color: company.primary_color }}>0{index + 1}</span>
                                             <p className="mt-5 text-xs font-bold uppercase tracking-wider text-slate-400">{service.category}</p>
                                             <h3 className="mt-2 text-xl font-extrabold">{service.name}</h3>
+                                            <p className="mt-2 text-sm font-extrabold" style={{ color: company.primary_color }}>{formatServicePrice(service.price)}</p>
                                             <p className="mt-4 flex-1 text-sm leading-7 text-slate-600">{service.summary}</p>
                                         </div>
                                     </Link>

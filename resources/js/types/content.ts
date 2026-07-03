@@ -39,6 +39,7 @@ export type Service = {
     name: string;
     slug: string;
     category?: string;
+    price?: string;
     icon?: string;
     summary?: string;
     description?: string;
@@ -101,3 +102,5 @@ export const mediaUrl = (path?: string) => {
     if (path.startsWith('/') || path.startsWith('http')) return path;
     return `/${path}`;
 };
+
+export const formatServicePrice = (price?: string) => price?.trim() || 'Price on request';

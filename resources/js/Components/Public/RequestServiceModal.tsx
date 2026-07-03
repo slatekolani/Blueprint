@@ -1,4 +1,4 @@
-import { CompanyBrief, Service } from '@/types/content';
+import { CompanyBrief, Service, formatServicePrice } from '@/types/content';
 import { useForm } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
 
@@ -152,7 +152,7 @@ export default function RequestServiceModal({ company, services = [], initialSer
                                         <option value="">All services / General enquiry</option>
                                         {services.map(svc => (
                                             <option key={svc.id} value={svc.id}>
-                                                {svc.category ? `${svc.category} — ` : ''}{svc.name}
+                                                {svc.category ? `${svc.category} — ` : ''}{svc.name} ({formatServicePrice(svc.price)})
                                             </option>
                                         ))}
                                     </select>

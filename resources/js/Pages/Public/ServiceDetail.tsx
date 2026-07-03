@@ -2,7 +2,7 @@ import { CompanyLogo } from '@/Components/Public/CompanyCard';
 import Breadcrumb from '@/Components/Public/Breadcrumb';
 import RequestForm from '@/Components/Public/RequestForm';
 import PublicLayout from '@/Layouts/PublicLayout';
-import { Company, Service, mediaUrl } from '@/types/content';
+import { Company, Service, formatServicePrice, mediaUrl } from '@/types/content';
 import { Head, Link } from '@inertiajs/react';
 
 type FullService = Service & { company: Company };
@@ -51,6 +51,7 @@ export default function ServiceDetail({ service, related }: { service: FullServi
                         {service.summary && (
                             <p className="mt-5 max-w-2xl text-lg leading-8 text-white/80">{service.summary}</p>
                         )}
+                        <p className="mt-5 text-2xl font-black text-white">{formatServicePrice(service.price)}</p>
                         <button type="button" onClick={scrollToRequest} className="btn-light mt-8">
                             Request this service
                         </button>
@@ -105,6 +106,7 @@ export default function ServiceDetail({ service, related }: { service: FullServi
                                     <div className="p-5">
                                         {s.category && <p className="text-xs font-black uppercase tracking-wider text-slate-400">{s.category}</p>}
                                         <h3 className="mt-2 font-extrabold">{s.name}</h3>
+                                        <p className="mt-2 text-sm font-extrabold" style={{ color }}>{formatServicePrice(s.price)}</p>
                                         <p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-500">{s.summary}</p>
                                     </div>
                                 </Link>
@@ -157,6 +159,7 @@ export default function ServiceDetail({ service, related }: { service: FullServi
                                     {company.short_name || company.name}
                                 </p>
                                 <h3 className="mt-1 text-xl font-extrabold text-slate-900">{service.name}</h3>
+                                <p className="mt-1 text-sm font-extrabold" style={{ color }}>{formatServicePrice(service.price)}</p>
                                 <p className="mt-1 text-sm text-slate-500">We'll respond within one business day.</p>
                                 <div className="mt-6">
                                     <RequestForm
