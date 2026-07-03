@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use App\Models\Company;
+use App\Models\GalleryItem;
 use App\Models\Project;
 use App\Models\Service;
 use App\Models\SiteSetting;
@@ -267,6 +268,24 @@ class PublicSiteController extends Controller
                     ] : null,
                     'dateCreated' => $project->completed_at,
                 ],
+            ],
+        ]);
+    }
+
+    public function gallery(): Response
+    {
+        return Inertia::render('Public/Gallery', [
+            'items' => GalleryItem::query()
+                ->where('is_published', true)
+                ->whereHas('service', fn ($query) => $query->where('is_published', true))
+                ->whereHas('service.company', fn ($query) => $query->where('is_published', true))
+                ->with(['service.company:id,name,slug,short_name,primary_color'])
+                ->orderBy('sort_order')
+                ->latest()
+                ->get(),
+            'meta' => [
+                'title'       => 'Gallery | BluePrint Group Tanzania',
+                'description' => 'Browse service photos and videos from BluePrint Group companies across design, printing, branding, supply, logistics and insurance work.',
             ],
         ]);
     }

@@ -68,6 +68,21 @@ export type Project = {
     company?: Pick<Company, 'id' | 'name' | 'slug' | 'short_name' | 'primary_color' | 'accent_color' | 'logo_path' | 'email'>;
 };
 
+export type GalleryItem = {
+    id: number;
+    service_id: number;
+    title: string;
+    description: string;
+    media_path: string;
+    media_type: 'image' | 'video';
+    mime_type?: string;
+    is_published: boolean;
+    sort_order: number;
+    service?: Pick<Service, 'id' | 'name' | 'slug' | 'category'> & {
+        company?: Pick<Company, 'id' | 'name' | 'slug' | 'short_name' | 'primary_color'>;
+    };
+};
+
 export type Inquiry = {
     id: number;
     company_id?: number;

@@ -8,6 +8,7 @@ const nav = [
     ['Companies', 'admin.companies.index'],
     ['Services', 'admin.services.index'],
     ['Projects', 'admin.projects.index'],
+    ['Gallery', 'admin.gallery.index'],
     ['Clients', 'admin.clients.index'],
     ['Inquiries', 'admin.inquiries.index'],
 ];

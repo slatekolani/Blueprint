@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\CompanyController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\GalleryItemController;
 use App\Http\Controllers\Admin\InquiryController as AdminInquiryController;
 use App\Http\Controllers\Admin\ProjectController;
 use App\Http\Controllers\Admin\ServiceController;
@@ -28,6 +29,7 @@ Route::get('/services', [PublicSiteController::class, 'services'])->name('servic
 Route::get('/services/{service:slug}', [PublicSiteController::class, 'service'])->name('services.show');
 Route::get('/projects', [PublicSiteController::class, 'projects'])->name('projects.index');
 Route::get('/projects/{project:slug}', [PublicSiteController::class, 'project'])->name('projects.show');
+Route::get('/gallery', [PublicSiteController::class, 'gallery'])->name('gallery.index');
 Route::get('/contact', [PublicSiteController::class, 'contact'])->name('contact');
 Route::post('/inquiries', [InquiryController::class, 'store'])->middleware('throttle:10,1')->name('inquiries.store');
 
@@ -39,6 +41,7 @@ Route::middleware(['auth', 'active'])->prefix('admin')->name('admin.')->group(fu
     Route::delete('/companies/{company}', [CompanyController::class, 'destroy'])->name('companies.destroy');
     Route::resource('services', ServiceController::class)->only(['index', 'store', 'update', 'destroy']);
     Route::resource('projects', ProjectController::class)->only(['index', 'store', 'update', 'destroy']);
+    Route::resource('gallery', GalleryItemController::class)->parameters(['gallery' => 'gallery'])->only(['index', 'store', 'update', 'destroy']);
     Route::resource('clients', ClientController::class)->only(['index', 'store', 'update', 'destroy']);
     Route::get('/inquiries', [AdminInquiryController::class, 'index'])->name('inquiries.index');
     Route::put('/inquiries/{inquiry}', [AdminInquiryController::class, 'update'])->name('inquiries.update');

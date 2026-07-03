@@ -36,6 +36,12 @@
         <priority>0.8</priority>
     </url>
     <url>
+        <loc>{{ route('gallery.index') }}</loc>
+        <lastmod>{{ now()->toAtomString() }}</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    <url>
         <loc>{{ route('contact') }}</loc>
         <lastmod>{{ now()->toAtomString() }}</lastmod>
         <changefreq>monthly</changefreq>

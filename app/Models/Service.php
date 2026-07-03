@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Service extends Model
@@ -30,6 +31,11 @@ class Service extends Model
     public function servicePrice(): HasOne
     {
         return $this->hasOne(ServicePrice::class);
+    }
+
+    public function galleryItems(): HasMany
+    {
+        return $this->hasMany(GalleryItem::class)->orderBy('sort_order');
     }
 
     public function getPriceAttribute(): string
