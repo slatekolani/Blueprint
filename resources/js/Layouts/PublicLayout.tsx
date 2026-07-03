@@ -14,7 +14,6 @@ const footerLinks = [
     ['Companies', 'companies.index'],
     ['Services', 'services.index'],
     ['Projects', 'projects.index'],
-    ['Gallery', 'gallery.index'],
     ['Contact', 'contact'],
 ];
 
@@ -263,7 +262,7 @@ export default function PublicLayout({ children }: PropsWithChildren) {
                                 </div>
                             )}
                         </div>
-                        <Link href={route('gallery.index')} className={`nav-link ${route().current('gallery.*') ? 'nav-link-active' : ''}`}>Gallery</Link>
+                        <Link href="/gallery" className={`nav-link ${url.startsWith('/gallery') ? 'nav-link-active' : ''}`}>Gallery</Link>
                         <Link href={route('contact')} className={`nav-link ${route().current('contact') ? 'nav-link-active' : ''}`}>Contact</Link>
                     </nav>
                     <div className="hidden items-center gap-3 lg:flex">
@@ -381,7 +380,7 @@ export default function PublicLayout({ children }: PropsWithChildren) {
                         </div>
                     )}
 
-                    <Link href={route('gallery.index')} onClick={closeMenu} className="block rounded-xl px-4 py-3 font-semibold text-white/80 transition hover:bg-white/10 hover:text-white">Gallery</Link>
+                    <Link href="/gallery" onClick={closeMenu} className="block rounded-xl px-4 py-3 font-semibold text-white/80 transition hover:bg-white/10 hover:text-white">Gallery</Link>
                     <Link href={route('contact')} onClick={closeMenu} className="block rounded-xl px-4 py-3 font-semibold text-white/80 transition hover:bg-white/10 hover:text-white">Contact</Link>
                 </nav>
 
